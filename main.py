@@ -8,7 +8,7 @@ from telethon.sync import TelegramClient
 from telethon.tl.functions.account import UpdateProfileRequest
 import config, time, subprocess, time, datetime
 
-print("Привет! Это TELEGRAM APP - GAME. Если вы не ввели данные, то введите ваши данные в файл 'config.py' для дальнейшей работы. Если будут вопросы/ошибки - то пишите автору. \n \n Автор: https://github.com/UW935\n TELEGRAM: @uw935\n \n")
+print("Hi! This is TELEGRAM APP - TIME. If you have not entered the data, then enter your data in the config.py file for further work. If you have any questions or error - write me. \n \n Author: https://github.com/UW935\n TELEGRAM: @uw935. \n \n")
 
 session_name = 'session'
 ApiId = config.api_id
@@ -25,7 +25,7 @@ while a < 50:
 		 	print(proc_output[i])
  
 		today = datetime.datetime.today()
-		profile_bio = "🎮 | Играет в " + proc_output[i] + " | " + today.strftime("%H:%M:%S")
+		profile_bio = "🎮 | Plays now в" + proc_output[i] + " | " + today.strftime("%H:%M:%S")
 		client(UpdateProfileRequest(about=profile_bio))
 		time.sleep(30)
 
