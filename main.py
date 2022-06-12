@@ -20,13 +20,20 @@ def telegApp():
 
 	while True:
 
-		try:
 			proc = subprocess.Popen('powershell "gps | where {$_.MainWindowTitle } | select Description', shell=False, stdout = subprocess.PIPE)
 			proc_output = [line.decode().rstrip() for line in proc.stdout if line.rstrip()]
+			
 			outp = proc_output[2]
 
+			if proc_output[2] == '-----------':
+				print("No app found")
+				break
+
 			if proc_output[2] == 'Discord' or 'Python':
-				outp = proc_output[3]
+				try:
+					outp = proc_output[3]
+				except:
+					outp = proc_output[2]
 			
 			for x in appsettings.app:
 				if x in outp.lower():
@@ -50,10 +57,6 @@ def telegApp():
 
 			sec += 15
 
-		except:
-			client(UpdateProfileRequest(about = bionow))
-			break
-
 def telegTime():
 	print("\nYou select: current time to telegram\n")
 	print("Program started. Use CTRL+C to exit\n\n\n\n")
@@ -71,10 +74,10 @@ def telegTime():
 
 with TelegramClient('session', API_ID, API_HASH) as client:
 	bionow = str(client(GetFullUserRequest(client.get_me().username)).about)
+
 	print(f"\nSuccessfully connected as {client.get_me().username}")
 
 	while True:
-
 		print("\nMENU: \n\n[1] - current time to telegram\n[2] - current app to telegram\n[3] - exit\n\n")
 		action = int(input("Just send number. Select an action from the menu: "))
 
