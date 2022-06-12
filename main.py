@@ -19,43 +19,47 @@ def telegApp():
 	hour = 00
 
 	while True:
+			try:
+				proc = subprocess.Popen('powershell "gps | where {$_.MainWindowTitle } | select Description', shell=False, stdout = subprocess.PIPE)
+				proc_output = [line.decode().rstrip() for line in proc.stdout if line.rstrip()]
+				
+				outp = proc_output[2]
 
-			proc = subprocess.Popen('powershell "gps | where {$_.MainWindowTitle } | select Description', shell=False, stdout = subprocess.PIPE)
-			proc_output = [line.decode().rstrip() for line in proc.stdout if line.rstrip()]
-			
-			outp = proc_output[2]
+				if proc_output[2] == '-----------':
+					print("No app found")
+					break
 
-			if proc_output[2] == '-----------':
-				print("No app found")
+				if proc_output[2] == 'Discord' or 'Python':
+					try:
+						outp = proc_output[3]
+					except:
+						outp = proc_output[2]
+				
+				for x in appsettings.app:
+					if x in outp.lower():
+						delt = appsettings.app[x]
+
+				if delt:
+					delt = delt
+				else:
+					delt = 'playing'
+
+				if sec >= 60:
+					mint += 1
+					sec = 0
+
+				elif sec >= 3600:
+					hour += 1
+					sec = 00
+
+				client(UpdateProfileRequest(about = f"🎮 | Now {delt} in {outp} | {hour}:{mint}:{sec}"))
+				time.sleep(15)
+
+				sec += 15
+				
+			except:
+				client(UpdateProfileRequest(about = bionow))
 				break
-
-			if proc_output[2] == 'Discord' or 'Python':
-				try:
-					outp = proc_output[3]
-				except:
-					outp = proc_output[2]
-			
-			for x in appsettings.app:
-				if x in outp.lower():
-					delt = appsettings.app[x]
-
-			if delt:
-				delt = delt
-			else:
-				delt = 'playing'
-
-			if sec >= 60:
-				mint += 1
-				sec = 0
-
-			elif sec >= 3600:
-				hour += 1
-				sec = 00
-
-			client(UpdateProfileRequest(about = f"🎮 | Now {delt} in {outp} | {hour}:{mint}:{sec}"))
-			time.sleep(15)
-
-			sec += 15
 
 def telegTime():
 	print("\nYou select: current time to telegram\n")
